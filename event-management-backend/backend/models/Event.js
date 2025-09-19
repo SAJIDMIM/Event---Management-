@@ -16,7 +16,7 @@ const EventSchema = new mongoose.Schema(
       type: Date,
       required: [true, "Event date is required"],
     },
-    venue: {  // Changed from "location" to "venue" as per requirements
+    venue: {
       type: String,
       required: [true, "Event venue is required"],
       trim: true,
@@ -25,18 +25,16 @@ const EventSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Event capacity is required"],
       min: [1, "Capacity must be at least 1"],
+      default: 1, // default value if not provided
     },
     status: {
       type: String,
-      enum: {
-        values: ['draft', 'published', 'cancelled'],
-        message: 'Status must be either draft, published, or cancelled'
-      },
-      default: 'draft',
+      enum: ["draft", "published", "cancelled"],
+      default: "draft",
     },
   },
   {
-    timestamps: true, // This will automatically add createdAt and updatedAt
+    timestamps: true, // adds createdAt and updatedAt automatically
   }
 );
 
