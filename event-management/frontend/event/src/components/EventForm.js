@@ -12,35 +12,41 @@ const EventForm = ({ editEvent, eventToEdit, setCurrentView, addEvent }) => {
     status: "draft",
   });
 
+  // Prefill form if editing
   useEffect(() => {
-    if (eventToEdit) setEvent(eventToEdit);
+    if (eventToEdit) {
+      setEvent({
+        ...eventToEdit,
+        date: eventToEdit.date ? eventToEdit.date.split("T")[0] : "",
+      });
+    }
   }, [eventToEdit]);
 
   const handleChange = (e) => {
-    setEvent({ ...event, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEvent((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure capacity is a proper integer
+    // Convert capacity safely
     const eventData = {
       ...event,
-      capacity: parseInt(event.capacity.toString().trim(), 10),
+      capacity: event.capacity ? parseInt(event.capacity, 10) : 1,
     };
 
     try {
       if (eventToEdit) {
+        // Update existing event
         const res = await axios.put(
           `http://localhost:5000/api/events/${eventToEdit._id}`,
           eventData
         );
         editEvent(res.data);
       } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/events",
-          eventData
-        );
+        // Create new event
+        const res = await axios.post("http://localhost:5000/api/events", eventData);
         addEvent(res.data);
       }
 
@@ -54,10 +60,10 @@ const EventForm = ({ editEvent, eventToEdit, setCurrentView, addEvent }) => {
         status: "draft",
       });
 
-      setCurrentView("events");
+      setCurrentView("events"); // Switch back to list view
     } catch (err) {
-      console.error("Error saving event:", err.response?.data || err.message);
-      alert("Failed to save event. Check console for details.");
+      console.error("❌ Error saving event:", err.response?.data || err.message);
+      alert("Failed to save event. Please try again.");
     }
   };
 
@@ -108,7 +114,7 @@ const EventForm = ({ editEvent, eventToEdit, setCurrentView, addEvent }) => {
             <input
               type="date"
               name="date"
-              value={event.date ? event.date.split("T")[0] : ""}
+              value={event.date}
               onChange={handleChange}
               required
             />

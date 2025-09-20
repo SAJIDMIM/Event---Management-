@@ -11,6 +11,7 @@ const App = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null); // For single-event details
 
   // Fetch events
   const fetchEvents = async () => {
@@ -39,6 +40,7 @@ const App = () => {
     setFilteredEvents((prev) =>
       prev.map((evt) => (evt._id === updatedEvent._id ? updatedEvent : evt))
     );
+    setSelectedEvent(updatedEvent); // Update detail view if open
   };
 
   const deleteEvent = async (id) => {
@@ -46,6 +48,7 @@ const App = () => {
       await axios.delete(`http://localhost:5000/api/events/${id}`);
       setEvents((prev) => prev.filter((evt) => evt._id !== id));
       setFilteredEvents((prev) => prev.filter((evt) => evt._id !== id));
+      if (selectedEvent?._id === id) setSelectedEvent(null);
     } catch (err) {
       console.error("Failed to delete event:", err);
     }
@@ -53,7 +56,12 @@ const App = () => {
 
   const editEvent = (event) => {
     setEventToEdit(event);
-    setCurrentView("home");
+    setCurrentView("home"); // Open EventForm
+  };
+
+  const openEventDetails = (event) => {
+    setSelectedEvent(event);
+    setCurrentView("eventDetail");
   };
 
   return (
@@ -71,6 +79,7 @@ const App = () => {
             onClick={(e) => {
               e.preventDefault();
               setEventToEdit(null);
+              setSelectedEvent(null);
               setCurrentView("home");
             }}
           >
@@ -81,6 +90,7 @@ const App = () => {
             className={currentView === "events" ? "active" : ""}
             onClick={(e) => {
               e.preventDefault();
+              setSelectedEvent(null);
               setCurrentView("events");
             }}
           >
@@ -99,7 +109,7 @@ const App = () => {
         </nav>
       </header>
 
-      {/* Main content */}
+      {/* Main Content */}
       <main style={{ flex: 1, paddingTop: "20px", minHeight: "calc(100vh - 80px)" }}>
         {currentView === "home" && (
           <EventForm
@@ -109,18 +119,49 @@ const App = () => {
             addEvent={addEvent}
           />
         )}
+
         {currentView === "events" && (
           <>
             <SearchBar events={events} onSearchResult={setFilteredEvents} />
             <EventList
-              events={filteredEvents} // Only filtered events are displayed
+              events={filteredEvents}
               deleteEvent={deleteEvent}
               editEvent={editEvent}
               setCurrentView={setCurrentView}
               currentView={currentView}
+              openEventDetails={openEventDetails} // Pass the function
             />
           </>
         )}
+
+        {currentView === "eventDetail" && selectedEvent && (
+          <div className="event-detail-container" style={{ padding: "20px" }}>
+            <h2>{selectedEvent.title}</h2>
+            <p><strong>Date:</strong> {selectedEvent.date.split("T")[0]}</p>
+            <p><strong>Venue:</strong> {selectedEvent.venue}</p>
+            <p><strong>Capacity:</strong> {selectedEvent.capacity}</p>
+            <p><strong>Status:</strong> {selectedEvent.status}</p>
+            <p><strong>Description:</strong> {selectedEvent.description}</p>
+            <button
+              className="edit-btn"
+              onClick={() => {
+                editEvent(selectedEvent); // Go to edit form
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="delete-btn"
+              onClick={() => {
+                deleteEvent(selectedEvent._id);
+                setCurrentView("events");
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        )}
+
         {currentView === "about" && (
           <AboutUs setCurrentView={setCurrentView} currentView={currentView} />
         )}

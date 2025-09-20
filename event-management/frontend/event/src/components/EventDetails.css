@@ -1,64 +1,104 @@
 .event-details-container {
   max-width: 800px;
-  margin: 20px auto;
+  margin: 40px auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .back-btn {
-  background: #2563eb;
+  align-self: flex-start;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   margin-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .back-btn:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+  transform: translateY(-2px);
 }
 
 .event-details-card {
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  width: 100%;
+  animation: fadeInUp 0.4s ease;
 }
 
 .event-title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: #111827;
   margin-bottom: 15px;
-  color: #1e3a8a;
-}
-
-.event-info {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  color: #4b5563;
-}
-
-.event-status {
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.status-draft {
-  color: #6b7280;
-}
-
-.status-published {
-  color: #059669;
-}
-
-.status-cancelled {
-  color: #dc2626;
 }
 
 .event-description {
-  font-size: 1rem;
-  color: #374151;
-  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 25px;
   line-height: 1.6;
+}
+
+.event-meta p {
+  font-size: 1.05rem;
+  color: #374151;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-icon {
+  font-size: 1.3rem;
+}
+
+.event-status {
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.status-draft {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-published {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.not-found {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
