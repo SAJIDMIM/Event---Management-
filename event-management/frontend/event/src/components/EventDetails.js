@@ -2,38 +2,52 @@ import React from "react";
 import "./EventDetails.css";
 
 const EventDetails = ({ event, goBack }) => {
-  if (!event) return <p className="not-found">Event not found.</p>;
+  if (!event) {
+    return <p className="not-found">Event not found.</p>;
+  }
 
   return (
     <div className="event-details-container">
       <button className="back-btn" onClick={goBack}>
-        ← Back to Events
+        ← Back
       </button>
 
-      <div className="event-details-card">
-        <h2 className="event-title">{event.title}</h2>
-        <p className="event-description">{event.description}</p>
+      <h2 className="event-title">{event.title}</h2>
+      <p className="event-description">{event.description}</p>
 
-        <div className="event-meta">
-          <p>
-            <span className="meta-icon">📅</span>
-            <strong>Date:</strong> {new Date(event.date).toLocaleDateString()}
-          </p>
-          <p>
-            <span className="meta-icon">📍</span>
-            <strong>Venue:</strong> {event.venue}
-          </p>
-          <p>
-            <span className="meta-icon">👥</span>
-            <strong>Capacity:</strong> {event.capacity}
-          </p>
-          <p>
-            <span className="meta-icon">⚡</span>
-            <strong>Status:</strong>{" "}
-            <span className={`event-status status-${event.status || "draft"}`}>
-              {event.status || "Draft"}
+      <div className="event-meta">
+        <div className="meta-item">
+          <span className="meta-icon">📅</span>
+          <span>
+            <span className="meta-label">Date: </span>
+            <span className="meta-value">{event.date.split("T")[0]}</span>
+          </span>
+        </div>
+
+        <div className="meta-item">
+          <span className="meta-icon">📍</span>
+          <span>
+            <span className="meta-label">Venue: </span>
+            <span className="meta-value">{event.venue}</span>
+          </span>
+        </div>
+
+        <div className="meta-item">
+          <span className="meta-icon">👥</span>
+          <span>
+            <span className="meta-label">Capacity: </span>
+            <span className="meta-value">{event.capacity}</span>
+          </span>
+        </div>
+
+        <div className="meta-item">
+          <span className="meta-icon">⚡</span>
+          <span>
+            <span className="meta-label">Status: </span>
+            <span className={`event-status status-${event.status.toLowerCase()}`}>
+              {event.status}
             </span>
-          </p>
+          </span>
         </div>
       </div>
     </div>

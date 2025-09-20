@@ -30,27 +30,25 @@ const EventForm = ({ editEvent, eventToEdit, setCurrentView, addEvent }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Convert capacity safely
     const eventData = {
       ...event,
       capacity: event.capacity ? parseInt(event.capacity, 10) : 1,
     };
 
     try {
+      let res;
       if (eventToEdit) {
-        // Update existing event
-        const res = await axios.put(
+        res = await axios.put(
           `http://localhost:5000/api/events/${eventToEdit._id}`,
           eventData
         );
         editEvent(res.data);
       } else {
-        // Create new event
-        const res = await axios.post("http://localhost:5000/api/events", eventData);
+        res = await axios.post("http://localhost:5000/api/events", eventData);
         addEvent(res.data);
       }
 
-      // Reset form
+      // Reset form fields immediately
       setEvent({
         title: "",
         description: "",
@@ -59,6 +57,13 @@ const EventForm = ({ editEvent, eventToEdit, setCurrentView, addEvent }) => {
         capacity: "",
         status: "draft",
       });
+
+      // Show alert once
+      if (event.status === "cancelled") {
+        alert("⚠️ This event is marked as Cancelled.");
+      } else {
+        alert("✅ Event saved successfully!");
+      }
 
       setCurrentView("events"); // Switch back to list view
     } catch (err) {

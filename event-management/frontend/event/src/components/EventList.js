@@ -8,17 +8,44 @@ const EventList = ({
   editEvent,
   setCurrentView,
   currentView,
-  openEventDetails, // New prop for single event details
+  openEventDetails, // For single event details
 }) => {
   const gridRef = useRef(null);
 
   const scroll = (direction) => {
     if (gridRef.current) {
-      const scrollAmount = 300; // You can adjust
+      const scrollAmount = 300; // Adjust as needed
       gridRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
+    }
+  };
+
+  const handleDelete = async (id, title) => {
+    const confirmed = window.confirm(
+      `🗑️ Do you really want to delete "${title}"?\n\nClick "OK" for Yes or "Cancel" for No.`
+    );
+
+    if (confirmed) {
+      try {
+        await deleteEvent(id); // Calls App.js deleteEvent (DB + state)
+        // Removed alert to prevent double pop-ups
+        // Any open form/details view can be cleared in App.js if needed
+      } catch (err) {
+        console.error("❌ Error deleting event:", err);
+        alert("Failed to delete event. Please try again.");
+      }
+    }
+  };
+
+  const handleEdit = (event) => {
+    const confirmed = window.confirm(
+      `✏️ Do you want to update "${event.title}"?\n\nClick "OK" for Yes or "Cancel" for No.`
+    );
+
+    if (confirmed) {
+      editEvent(event); // Sends event to App.js for editing
     }
   };
 
@@ -34,21 +61,30 @@ const EventList = ({
           <a
             href="#home"
             className={currentView === "home" ? "active" : ""}
-            onClick={(e) => { e.preventDefault(); setCurrentView("home"); }}
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentView("home");
+            }}
           >
             Home
           </a>
           <a
             href="#events"
             className={currentView === "events" ? "active" : ""}
-            onClick={(e) => { e.preventDefault(); setCurrentView("events"); }}
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentView("events");
+            }}
           >
             Event List
           </a>
           <a
             href="#about"
             className={currentView === "about" ? "active" : ""}
-            onClick={(e) => { e.preventDefault(); setCurrentView("about"); }}
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentView("about");
+            }}
           >
             About Us
           </a>
@@ -82,7 +118,11 @@ const EventList = ({
                   <p className="event-detail">
                     <strong>Capacity:</strong> {event.capacity}
                   </p>
-                  <p className={`event-detail status-${(event.status || "draft").toLowerCase()}`}>
+                  <p
+                    className={`event-detail status-${
+                      (event.status || "draft").toLowerCase()
+                    }`}
+                  >
                     <strong>Status:</strong> {event.status || "Draft"}
                   </p>
                   <div className="event-actions">
@@ -90,7 +130,7 @@ const EventList = ({
                       className="edit-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        editEvent(event);
+                        handleEdit(event);
                       }}
                     >
                       Edit
@@ -99,7 +139,7 @@ const EventList = ({
                       className="delete-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteEvent(event._id);
+                        handleDelete(event._id, event.title);
                       }}
                     >
                       Delete
@@ -109,7 +149,7 @@ const EventList = ({
               ))}
             </div>
 
-            {/* Scroll buttons below the cards */}
+            {/* Scroll buttons */}
             <div className="scroll-arrows-container">
               <button className="scroll-arrow" onClick={() => scroll("left")}>
                 &#8592;

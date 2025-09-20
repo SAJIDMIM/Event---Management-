@@ -11,14 +11,14 @@ const App = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null); // For single-event details
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   // Fetch events
   const fetchEvents = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/events");
       setEvents(res.data);
-      setFilteredEvents(res.data); // Initially show all
+      setFilteredEvents(res.data);
     } catch (err) {
       console.error("Failed to fetch events:", err);
     }
@@ -31,6 +31,7 @@ const App = () => {
   const addEvent = (newEvent) => {
     setEvents((prev) => [...prev, newEvent]);
     setFilteredEvents((prev) => [...prev, newEvent]);
+    alert(`✅ "${newEvent.title}" added successfully!`);
   };
 
   const editEventHandler = (updatedEvent) => {
@@ -40,17 +41,27 @@ const App = () => {
     setFilteredEvents((prev) =>
       prev.map((evt) => (evt._id === updatedEvent._id ? updatedEvent : evt))
     );
-    setSelectedEvent(updatedEvent); // Update detail view if open
+    setSelectedEvent(updatedEvent);
+    alert(`✏️ "${updatedEvent.title}" updated successfully!`);
   };
 
   const deleteEvent = async (id) => {
+    const eventToDelete = events.find((evt) => evt._id === id);
+    const confirmed = window.confirm(
+      `🗑️ Do you really want to delete "${eventToDelete.title}"?`
+    );
+
+    if (!confirmed) return;
+
     try {
       await axios.delete(`http://localhost:5000/api/events/${id}`);
       setEvents((prev) => prev.filter((evt) => evt._id !== id));
       setFilteredEvents((prev) => prev.filter((evt) => evt._id !== id));
       if (selectedEvent?._id === id) setSelectedEvent(null);
+      alert(`✅ "${eventToDelete.title}" deleted successfully!`);
     } catch (err) {
       console.error("Failed to delete event:", err);
+      alert("❌ Failed to delete event. Please try again.");
     }
   };
 
@@ -129,36 +140,59 @@ const App = () => {
               editEvent={editEvent}
               setCurrentView={setCurrentView}
               currentView={currentView}
-              openEventDetails={openEventDetails} // Pass the function
+              openEventDetails={openEventDetails}
             />
           </>
         )}
 
         {currentView === "eventDetail" && selectedEvent && (
-          <div className="event-detail-container" style={{ padding: "20px" }}>
-            <h2>{selectedEvent.title}</h2>
-            <p><strong>Date:</strong> {selectedEvent.date.split("T")[0]}</p>
-            <p><strong>Venue:</strong> {selectedEvent.venue}</p>
-            <p><strong>Capacity:</strong> {selectedEvent.capacity}</p>
-            <p><strong>Status:</strong> {selectedEvent.status}</p>
-            <p><strong>Description:</strong> {selectedEvent.description}</p>
+          <div className="event-details-container">
             <button
-              className="edit-btn"
-              onClick={() => {
-                editEvent(selectedEvent); // Go to edit form
-              }}
+              className="back-btn"
+              onClick={() => setCurrentView("events")}
             >
-              Edit
+              ← Back
             </button>
-            <button
-              className="delete-btn"
-              onClick={() => {
-                deleteEvent(selectedEvent._id);
-                setCurrentView("events");
-              }}
-            >
-              Delete
-            </button>
+            <div className="event-details-card">
+              <h2 className="event-title">{selectedEvent.title}</h2>
+              <p className="event-description">{selectedEvent.description}</p>
+              <div className="event-meta">
+                <div className="meta-item">
+                  <div className="meta-icon date">📅</div>
+                  <div className="meta-content">
+                    <span className="meta-label">Date</span>
+                    <span className="meta-value">
+                      {selectedEvent.date.split("T")[0]}
+                    </span>
+                  </div>
+                </div>
+                <div className="meta-item">
+                  <div className="meta-icon venue">📍</div>
+                  <div className="meta-content">
+                    <span className="meta-label">Venue</span>
+                    <span className="meta-value">{selectedEvent.venue}</span>
+                  </div>
+                </div>
+                <div className="meta-item">
+                  <div className="meta-icon capacity">👥</div>
+                  <div className="meta-content">
+                    <span className="meta-label">Capacity</span>
+                    <span className="meta-value">{selectedEvent.capacity}</span>
+                  </div>
+                </div>
+                <div className="meta-item">
+                  <div className="meta-icon status">⚡</div>
+                  <div className="meta-content">
+                    <span className="meta-label">Status</span>
+                    <span
+                      className={`event-status status-${selectedEvent.status.toLowerCase()}`}
+                    >
+                      {selectedEvent.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
