@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EventForm from "./components/EventForm";
 import EventList from "./components/EventList";
-import EventDetails from "./components/EventDetails";
 import AboutUs from "./components/AboutUs";
 import SearchBar from "./components/SearchFilter";
 import logo from "./assets/images.png";
@@ -12,14 +11,13 @@ const App = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   // Fetch events
   const fetchEvents = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/events");
       setEvents(res.data);
-      setFilteredEvents(res.data);
+      setFilteredEvents(res.data); // Initially show all
     } catch (err) {
       console.error("Failed to fetch events:", err);
     }
@@ -56,16 +54,6 @@ const App = () => {
   const editEvent = (event) => {
     setEventToEdit(event);
     setCurrentView("home");
-  };
-
-  const openEventDetails = (event) => {
-    setSelectedEvent(event);
-    setCurrentView("eventDetails");
-  };
-
-  const goBack = () => {
-    setSelectedEvent(null);
-    setCurrentView("events");
   };
 
   return (
@@ -125,17 +113,13 @@ const App = () => {
           <>
             <SearchBar events={events} onSearchResult={setFilteredEvents} />
             <EventList
-              events={filteredEvents}
+              events={filteredEvents} // Only filtered events are displayed
               deleteEvent={deleteEvent}
               editEvent={editEvent}
               setCurrentView={setCurrentView}
               currentView={currentView}
-              openEventDetails={openEventDetails}
             />
           </>
-        )}
-        {currentView === "eventDetails" && (
-          <EventDetails event={selectedEvent} goBack={goBack} />
         )}
         {currentView === "about" && (
           <AboutUs setCurrentView={setCurrentView} currentView={currentView} />

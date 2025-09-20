@@ -4,25 +4,18 @@ import "./SearchFilter.css";
 const SearchBar = ({ events, onSearchResult }) => {
   const [query, setQuery] = useState("");
 
-  const handleSearchClick = () => {
-    if (!query) {
-      onSearchResult(events); // Show all if empty
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    // Filter events dynamically as user types
+    if (!value) {
+      onSearchResult(events); // Show all if input is empty
     } else {
       const filtered = events.filter((evt) =>
-        evt.title.toLowerCase().includes(query.toLowerCase())
+        evt.title.toLowerCase().includes(value.toLowerCase())
       );
       onSearchResult(filtered);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-  };
-
-  const handleEnterPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSearchClick();
     }
   };
 
@@ -33,13 +26,9 @@ const SearchBar = ({ events, onSearchResult }) => {
         type="text"
         placeholder="Type event title..."
         value={query}
-        onChange={handleInputChange}
-        onKeyDown={handleEnterPress}
+        onChange={handleInputChange} // Live search here
         className="search-input"
       />
-      <button className="search-btn" onClick={handleSearchClick}>
-        🔍
-      </button>
     </div>
   );
 };
