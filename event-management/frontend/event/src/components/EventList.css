@@ -1,41 +1,50 @@
+/* Container adjustments */
 .event-list-container {
-  padding: 40px 20px;
+  padding: 5px 10px; /* Reduced top padding */
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
+  margin-top: 0px; /* Reduced margin */
 }
 
-.event-list-title {
-  text-align: center;
-  font-size: 2.5rem;
-  color: #1e3a8a;
-  margin-bottom: 20px;
+/* Search box styling */
+.search-container {
+  margin-bottom: 10px; /* Reduced margin below search */
+  padding: 0 10px;
 }
 
-.no-events {
-  text-align: center;
-  color: #6b7280;
-  font-size: 1.2rem;
+.search-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Horizontal scroll layout */
+/* Event grid adjustments */
 .events-grid {
   display: flex;
   gap: 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding-bottom: 10px;
+  padding: 5px 0 15px 0; /* Reduced top padding */
+  margin-top: 5px; /* Reduced margin */
 }
 
-.events-grid::-webkit-scrollbar {
-  height: 8px;
+/* Title adjustments */
+.event-list-title {
+  text-align: center;
+  font-size: 2.2rem; /* Slightly smaller */
+  color: #1e3a8a;
+  margin-bottom: 15px; /* Reduced margin */
+  margin-top: 5px; /* Reduced top margin */
 }
 
-.events-grid::-webkit-scrollbar-thumb {
-  background-color: #2563eb;
-  border-radius: 4px;
-}
-
+/* Keep the rest of your existing styles below */
 .event-card {
   min-width: 280px;
   background: #ffffff;
@@ -51,7 +60,6 @@
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
-/* Arrow buttons below the card list */
 .scroll-arrows-container {
   display: flex;
   justify-content: center;
@@ -78,7 +86,6 @@
   background-color: #1d4ed8;
 }
 
-/* Event info styling remains the same */
 .event-name {
   font-size: 1.6rem;
   color: #111827;
@@ -146,4 +153,19 @@
 
 .delete-btn:hover {
   background: #b91c1c;
+}
+
+.no-events {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.2rem;
+}
+
+.events-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.events-grid::-webkit-scrollbar-thumb {
+  background-color: #2563eb;
+  border-radius: 4px;
 }

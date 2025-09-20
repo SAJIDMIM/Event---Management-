@@ -2,19 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EventForm from "./components/EventForm";
 import EventList from "./components/EventList";
-import AboutUs from "./components/AboutUs"; // Import the modern AboutUs
+import EventDetails from "./components/EventDetails";
+import AboutUs from "./components/AboutUs";
+import SearchBar from "./components/SearchFilter";
 import logo from "./assets/images.png";
 
 const App = () => {
   const [currentView, setCurrentView] = useState("home");
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   // Fetch events
   const fetchEvents = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/events");
       setEvents(res.data);
+      setFilteredEvents(res.data);
     } catch (err) {
       console.error("Failed to fetch events:", err);
     }
@@ -26,10 +31,14 @@ const App = () => {
 
   const addEvent = (newEvent) => {
     setEvents((prev) => [...prev, newEvent]);
+    setFilteredEvents((prev) => [...prev, newEvent]);
   };
 
   const editEventHandler = (updatedEvent) => {
     setEvents((prev) =>
+      prev.map((evt) => (evt._id === updatedEvent._id ? updatedEvent : evt))
+    );
+    setFilteredEvents((prev) =>
       prev.map((evt) => (evt._id === updatedEvent._id ? updatedEvent : evt))
     );
   };
@@ -38,6 +47,7 @@ const App = () => {
     try {
       await axios.delete(`http://localhost:5000/api/events/${id}`);
       setEvents((prev) => prev.filter((evt) => evt._id !== id));
+      setFilteredEvents((prev) => prev.filter((evt) => evt._id !== id));
     } catch (err) {
       console.error("Failed to delete event:", err);
     }
@@ -45,7 +55,17 @@ const App = () => {
 
   const editEvent = (event) => {
     setEventToEdit(event);
-    setCurrentView("home"); // Go to form for editing
+    setCurrentView("home");
+  };
+
+  const openEventDetails = (event) => {
+    setSelectedEvent(event);
+    setCurrentView("eventDetails");
+  };
+
+  const goBack = () => {
+    setSelectedEvent(null);
+    setCurrentView("events");
   };
 
   return (
@@ -98,20 +118,28 @@ const App = () => {
             editEvent={editEventHandler}
             eventToEdit={eventToEdit}
             setCurrentView={setCurrentView}
-            currentView={currentView}
             addEvent={addEvent}
           />
         )}
         {currentView === "events" && (
-          <EventList
-            events={events}
-            deleteEvent={deleteEvent}
-            editEvent={editEvent}
-            setCurrentView={setCurrentView}
-            currentView={currentView}
-          />
+          <>
+            <SearchBar events={events} onSearchResult={setFilteredEvents} />
+            <EventList
+              events={filteredEvents}
+              deleteEvent={deleteEvent}
+              editEvent={editEvent}
+              setCurrentView={setCurrentView}
+              currentView={currentView}
+              openEventDetails={openEventDetails}
+            />
+          </>
         )}
-        {currentView === "about" && <AboutUs setCurrentView={setCurrentView} currentView={currentView} />}
+        {currentView === "eventDetails" && (
+          <EventDetails event={selectedEvent} goBack={goBack} />
+        )}
+        {currentView === "about" && (
+          <AboutUs setCurrentView={setCurrentView} currentView={currentView} />
+        )}
       </main>
     </div>
   );
