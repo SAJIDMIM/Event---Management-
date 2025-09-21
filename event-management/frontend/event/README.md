@@ -96,15 +96,24 @@ DELETE     /api/events/:id     Delete an event
 
 Here is the provided link of sreenshots : 
 
+[text](https://drive.google.com/file/d/1uO30YUr91tKaKM5m1DxNfO9ji0eSaAnV/view?usp=drive_link)
+
 
 ****************Demonstration of the Event Management App************************
 
 Here to access the video :
 
+[text](https://drive.google.com/file/d/1s_gjQAwxWUpIx3uDrO4wdBuS4ej7-kW5/view?usp=drive_link)
 
 ****************GitHub Repository*************************************************
 
 Here is the access to my source code : 
+
+[text](https://drive.google.com/file/d/1WJ8iuWUyG4tqTRZphVOGfnwvfkCSPmRU/view?usp=drive_link)
+
+----------------------------------OR---------------------------------------------------------
+
+[text](https://github.com/SAJIDMIM/Event---Management-)
 
 
 *****************Technologies used*************
