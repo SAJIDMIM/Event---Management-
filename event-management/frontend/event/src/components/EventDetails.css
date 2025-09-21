@@ -1,15 +1,22 @@
 .event-details-container {
-  padding: 60px 20px;
-  max-width: 700px;
-  margin: 0 auto;
+  padding: 40px 20px;
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  justify-content: center;
   font-family: 'Segoe UI', sans-serif;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.event-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 700px;
 }
 
 .back-btn {
-  align-self: flex-start;
   background: #2563eb;
   color: white;
   border: none;
@@ -19,6 +26,7 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .back-btn:hover {
@@ -35,44 +43,43 @@
 
 .event-description {
   font-size: 1.1rem;
-  line-height: 1.7;
+  line-height: 1.6;
   color: #4b5563;
   margin-bottom: 25px;
 }
 
 .event-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 1rem;
+  background: #f3f4f6;
+  padding: 12px 16px;
+  border-radius: 10px;
 }
 
 .meta-icon {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: #2563eb;
 }
 
-.meta-label {
-  font-weight: 600;
+.meta-text {
   color: #374151;
-}
-
-.meta-value {
-  color: #4b5563;
+  font-weight: 500;
 }
 
 .event-status {
   font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .status-draft {
@@ -91,11 +98,4 @@
   background: #fef2f2;
   color: #dc2626;
   border: 1px solid #fca5a5;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .event-meta {
-    grid-template-columns: 1fr;
-  }
 }

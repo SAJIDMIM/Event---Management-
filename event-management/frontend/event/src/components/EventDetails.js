@@ -12,42 +12,37 @@ const EventDetails = ({ event, goBack }) => {
         ← Back
       </button>
 
-      <h2 className="event-title">{event.title}</h2>
-      <p className="event-description">{event.description}</p>
+      <div className="event-card">
+        <h2 className="event-title">{event.title}</h2>
+        <p className="event-description">{event.description}</p>
 
-      <div className="event-meta">
-        <div className="meta-item">
-          <span className="meta-icon">📅</span>
-          <span>
-            <span className="meta-label">Date: </span>
-            <span className="meta-value">{event.date.split("T")[0]}</span>
-          </span>
-        </div>
+        <div className="event-meta">
+          <div className="meta-item">
+            <span className="meta-icon">📅</span>
+            <span className="meta-text">Date: {event.date.split("T")[0]}</span>
+          </div>
 
-        <div className="meta-item">
-          <span className="meta-icon">📍</span>
-          <span>
-            <span className="meta-label">Venue: </span>
-            <span className="meta-value">{event.venue}</span>
-          </span>
-        </div>
+          <div className="meta-item">
+            <span className="meta-icon">📍</span>
+            <span className="meta-text">Venue: {event.venue}</span>
+          </div>
 
-        <div className="meta-item">
-          <span className="meta-icon">👥</span>
-          <span>
-            <span className="meta-label">Capacity: </span>
-            <span className="meta-value">{event.capacity}</span>
-          </span>
-        </div>
+          <div className="meta-item">
+            <span className="meta-icon">👥</span>
+            <span className="meta-text">Capacity: {event.capacity}</span>
+          </div>
 
-        <div className="meta-item">
-          <span className="meta-icon">⚡</span>
-          <span>
-            <span className="meta-label">Status: </span>
-            <span className={`event-status status-${event.status.toLowerCase()}`}>
-              {event.status}
+          <div className="meta-item">
+            <span className="meta-icon">⚡</span>
+            <span className="meta-text">
+              Status:{" "}
+              <span
+                className={`event-status status-${event.status.toLowerCase()}`}
+              >
+                {event.status}
+              </span>
             </span>
-          </span>
+          </div>
         </div>
       </div>
     </div>
